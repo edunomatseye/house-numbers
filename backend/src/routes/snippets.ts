@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { db } from "../db";
-import { snippets } from "../db/schema.js";
+import { db } from "../db/index";
+import { snippets } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { generateSummary } from "../services/ai";
 import { NewSnippet } from "../types/snippet";

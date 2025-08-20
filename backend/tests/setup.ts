@@ -7,9 +7,6 @@ import { afterAll, beforeAll } from "vitest";
 
 dotenv.config({ path: ".env.test" }); // Ensure you have a .env.test file for test DB
 
-// Create a separate .env.test for testing environment
-// DATABASE_URL="postgresql://test_user:test_password@localhost:5433/test_snippets_db" (or use db:5432 if your test db is also running there)
-// This is crucial to avoid wiping your development database.
 const testDbUrl = process.env.DATABASE_URL;
 
 if (!testDbUrl) {

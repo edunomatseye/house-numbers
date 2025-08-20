@@ -21,7 +21,7 @@ services:
       - ./.env
     environment:
       PORT: 3000
-      DATABASE_URL: ${DATABASE_URL} # Use service name 'db' for internal Docker network
+      DATABASE_URL: ${DATABASE_URL}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
     depends_on:
       - db
@@ -37,13 +37,13 @@ services:
     env_file:
       - ./.env
     environment:
-      VITE_API_BASE_URL: http://api:3000 # Use service name 'api' for internal Docker network
+      VITE_API_BASE_URL: http://api:3000
       PORT: 3030
     ports:
       - "3030:3030"
     depends_on:
       - api
-    restart: "no" # Set to "on-failure" or "always" for production
+    restart: "no"
 
 volumes:
   pgdata:
