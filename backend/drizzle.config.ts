@@ -6,8 +6,8 @@ dotenv.config({ path: ".env" });
 export default {
   schema: "./src/db/schema.ts",
   out: "./drizzle", // Directory for migration files
-  driver: "pg",
+  dialect: "postgresql",
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL!,
+    url: "postgresql://user:password@db:5432/snippets_db",
   },
 } satisfies Config;

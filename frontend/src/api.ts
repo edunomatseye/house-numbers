@@ -1,5 +1,4 @@
-// frontend/src/api.ts
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api"; // Use /api proxy in dev, direct URL in production
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api"; //
 
 interface Snippet {
   id: string;

@@ -1,9 +1,9 @@
-import { drizzle } from "drizzle-orm/pg";
+import dotenv from "dotenv";
+dotenv.config();
+
+import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as schema from "./schema";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const connectionString = process.env.DATABASE_URL;
 
@@ -15,7 +15,10 @@ const pool = new Pool({
   connectionString: connectionString,
 });
 
-export const db = drizzle(pool, { schema });
+export const db = drizzle(pool, {
+  schema: schema,
+  logger: true, // Enable logging for debugging
+});
 
 // Function to connect and disconnect (useful for testing or explicit management)
 export async function connectDb() {

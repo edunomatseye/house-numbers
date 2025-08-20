@@ -4,8 +4,8 @@ This project implements a small service to create, read, and list text snippets.
 
 The service is split into two main components:
 
-1.  **Backend API:** Built with Express.js and TypeScript, using Drizzle ORM for PostgreSQL.
-2.  **Frontend UI:** A React application powered by Vite and TanStack Router.
+1. **Backend API:** Built with Express.js and TypeScript, using Drizzle ORM for PostgreSQL.
+2. **Frontend UI:** A React application powered by Vite and TanStack Router.
 
 ## Features
 
@@ -29,21 +29,24 @@ The service is split into two main components:
 
 ## Setup
 
-1.  **Clone the repository:**
+1. **Clone the repository:**
 
-    ```bash
-    git clone [YOUR_REPO_URL]
-    cd snippet-summarizer
-    ```
+   ```bash
+   git clone [YOUR_REPO_URL]
+   cd snippet-summarizer
+   ```
 
-2.  **Environment Variables:**
-    Copy the example environment file and fill in your details:
-    ```bash
-    cp .env.example .env
-    ```
-    Edit the `.env` file:
-    - `OPENAI_API_KEY`: Your OpenAI API key (e.g., `sk-xxxxxxxxxxxxxxxxxxxx`).
-    - `DATABASE_URL`: Connection string for your PostgreSQL database (e.g., `postgresql://user:password@localhost:5432/snippets_db` for local, or `postgresql://user:password@db:5432/snippets_db` for Docker Compose).
+2. **Environment Variables:**
+   Copy the example environment file and fill in your details:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Edit the `.env` file:
+
+   - `OPENAI_API_KEY`: Your OpenAI API key (e.g., `sk-xxxxxxxxxxxxxxxxxxxx`).
+   - `DATABASE_URL`: Connection string for your PostgreSQL database (e.g., `postgresql://user:password@localhost:5432/snippets_db` for local, or `postgresql://user:password@db:5432/snippets_db` for Docker Compose).
 
 ## Running the Application
 
@@ -179,10 +182,12 @@ Backend tests are written with Vitest and use Supertest for API integration.
 They utilize a real PostgreSQL connection (via `DATABASE_URL` env var) and mock the OpenAI API.
 
 - **Local:**
+
   ```bash
   cd backend
   npm test
   ```
+
 - **Docker:**
   Tests are executed automatically when the `api` service starts via `docker compose up`. If tests fail, the container will exit.
 
@@ -190,25 +195,25 @@ They utilize a real PostgreSQL connection (via `DATABASE_URL` env var) and mock 
 
 ### What I'd Improve with More Time
 
-1.  **Robust Error Handling & Logging:** Implement a more comprehensive error handling middleware in Express, differentiating between operational errors and programmer errors. Integrate a structured logger (e.g., Winston, Pino) for better observability.
-2.  **API Versioning:** For future changes, consider API versioning (e.g., `/v1/snippets`).
-3.  **Authentication & Authorization (Stretch Goal):** Implement JWT-based authentication for user management and role-based access control to snippets.
-4.  **Rate Limiting & Caching:** Add rate limiting to prevent abuse and consider caching mechanisms (e.g., Redis) for frequently accessed data to improve performance.
-5.  **Streaming AI Summary (Stretch Goal):** Implement Server-Sent Events (SSE) to stream the AI summary as it's generated, improving perceived performance for the user.
-6.  **Advanced Frontend Features:**
-    - Better UX for long texts (e.g., character count, responsive layout).
-    - Search/filter functionality for snippets.
-    - Client-side form validation feedback.
-7.  **CI/CD Pipeline (Stretch Goal):** Set up GitHub Actions or similar to lint, test, build Docker images, and potentially deploy automatically.
-8.  **Database Migrations:** Implement a more robust Drizzle migration strategy beyond simple `drizzle-kit push` for production-grade schema evolution.
-9.  **OpenAPI/Swagger Documentation:** Auto-generate API documentation for easy consumption by other teams.
+1. **Robust Error Handling & Logging:** Implement a more comprehensive error handling middleware in Express, differentiating between operational errors and programmer errors. Integrate a structured logger (e.g., Winston, Pino) for better observability.
+2. **API Versioning:** For future changes, consider API versioning (e.g., `/v1/snippets`).
+3. **Authentication & Authorization (Stretch Goal):** Implement JWT-based authentication for user management and role-based access control to snippets.
+4. **Rate Limiting & Caching:** Add rate limiting to prevent abuse and consider caching mechanisms (e.g., Redis) for frequently accessed data to improve performance.
+5. **Streaming AI Summary (Stretch Goal):** Implement Server-Sent Events (SSE) to stream the AI summary as it's generated, improving perceived performance for the user.
+6. **Advanced Frontend Features:**
+   - Better UX for long texts (e.g., character count, responsive layout).
+   - Search/filter functionality for snippets.
+   - Client-side form validation feedback.
+7. **CI/CD Pipeline (Stretch Goal):** Set up GitHub Actions or similar to lint, test, build Docker images, and potentially deploy automatically.
+8. **Database Migrations:** Implement a more robust Drizzle migration strategy beyond simple `drizzle-kit push` for production-grade schema evolution.
+9. **OpenAPI/Swagger Documentation:** Auto-generate API documentation for easy consumption by other teams.
 10. **Smaller Docker Images:** Utilize multi-stage builds in Dockerfiles to reduce final image size.
 
 ### Trade-offs Made
 
-1.  **Simplified AI Prompt:** The prompt for OpenAI is intentionally simple ("Summarize in ≤ 30 words") as per the requirement. In a real application, more sophisticated prompts, few-shot examples, or fine-tuning might be used for better summary quality and control.
-2.  **Synchronous AI Call:** The AI summary generation is a blocking call within the `POST /snippets` endpoint. For very long or high-volume summaries, this could be offloaded to a background queue (e.g., with RabbitMQ/Redis BullMQ) to keep the API responsive.
-3.  **Minimal Frontend Styling:** The frontend is functionally complete but has minimal styling to focus on core functionality and framework usage.
-4.  **No Drizzle Migrations in Docker-Compose:** For simplicity, the `docker-compose.yml` doesn't explicitly run Drizzle migrations. In a production setup, a separate `init` script or a dedicated migration step would be needed to ensure the database schema is up-to-date. (This is addressed with `npm run migrate` in local instructions).
-5.  **Basic Error Handling:** Error handling is present but relatively basic (500 for most server errors, 400 for validation). More specific error codes and messages could be provided.
-6.  **No CORS Configuration:** For Docker Compose setup, direct communication between `web` and `api` containers works. For independent local runs, the frontend might need specific CORS headers allowed on the backend for development. This is implicit when calling `http://api:3000` from `http://web:3030` internally in Docker, but `http://localhost:3000` from `http://localhost:3030` locally could require it.
+1. **Simplified AI Prompt:** The prompt for OpenAI is intentionally simple ("Summarize in ≤ 30 words") as per the requirement. In a real application, more sophisticated prompts, few-shot examples, or fine-tuning might be used for better summary quality and control.
+2. **Synchronous AI Call:** The AI summary generation is a blocking call within the `POST /snippets` endpoint. For very long or high-volume summaries, this could be offloaded to a background queue (e.g., with RabbitMQ/Redis BullMQ) to keep the API responsive.
+3. **Minimal Frontend Styling:** The frontend is functionally complete but has minimal styling to focus on core functionality and framework usage.
+4. **No Drizzle Migrations in Docker-Compose:** For simplicity, the `docker-compose.yml` doesn't explicitly run Drizzle migrations. In a production setup, a separate `init` script or a dedicated migration step would be needed to ensure the database schema is up-to-date. (This is addressed with `npm run migrate` in local instructions).
+5. **Basic Error Handling:** Error handling is present but relatively basic (500 for most server errors, 400 for validation). More specific error codes and messages could be provided.
+6. **No CORS Configuration:** For Docker Compose setup, direct communication between `web` and `api` containers works. For independent local runs, the frontend might need specific CORS headers allowed on the backend for development. This is implicit when calling `http://api:3000` from `http://web:3030` internally in Docker, but `http://localhost:3000` from `http://localhost:3030` locally could require it.

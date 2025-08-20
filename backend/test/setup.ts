@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { db, disconnectDb, connectDb } from "../src/db";
 import { Client } from "pg"; // Direct PG client for migrations
+import { afterAll, beforeAll } from "vitest";
 
 dotenv.config({ path: ".env.test" }); // Ensure you have a .env.test file for test DB
 

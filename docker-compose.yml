@@ -21,7 +21,8 @@ services:
       - ./.env
     environment:
       PORT: 3000
-      DATABASE_URL: postgresql://user:password@db:5432/snippets_db # Use service name 'db' for internal Docker network
+      DATABASE_URL: ${DATABASE_URL} # Use service name 'db' for internal Docker network
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
     depends_on:
       - db
     ports:

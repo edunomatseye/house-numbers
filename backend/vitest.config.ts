@@ -10,6 +10,5 @@ export default defineConfig({
       reporter: ["text", "json", "html"],
       exclude: ["node_modules/", "dist/", "src/server.ts", "src/app.ts"],
     },
-    threads: false, // Prevents issues with global setup and database connections
   },
 });

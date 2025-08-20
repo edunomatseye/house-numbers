@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { createSnippet, fetchSnippets } from "../api";
+import { createFileRoute } from "@tanstack/react-router";
 
 interface Snippet {
   id: string;
   text: string;
   summary: string;
 }
+
+export const Route = createFileRoute("/")({
+  component: Index,
+});
 
 function Index() {
   const [text, setText] = useState("");
@@ -89,5 +94,3 @@ function Index() {
     </div>
   );
 }
-
-export default Index;
