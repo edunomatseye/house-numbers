@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: snippets_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://user:password@db:5432/snippets_db # Use service name 'db' for internal Docker network
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    # The CMD in Dockerfile runs tests and then starts the server
+    restart: "no" # Set to "on-failure" or "always" for production
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    environment:
+      VITE_API_BASE_URL: http://api:3000 # Use service name 'api' for internal Docker network
+      PORT: 3030
+    ports:
+      - "3030:3030"
+    depends_on:
+      - api
+    restart: "no" # Set to "on-failure" or "always" for production
+
+volumes:
+  pgdata:
