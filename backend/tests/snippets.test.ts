@@ -113,7 +113,7 @@ describe("Snippets API", () => {
     expect(resGet.body).toEqual({
       id: id,
       text: "A unique snippet to be found by ID.",
-      summary: "MOCKED_SUMMARY: A unique snippet to...",
+      summary: "MOCKED_SUMMARY: A unique snippet to be...",
     });
   });
 

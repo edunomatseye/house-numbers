@@ -5,10 +5,10 @@ import { db, disconnectDb, connectDb } from "../src/db";
 import { Client } from "pg"; // Direct PG client for migrations
 import { afterAll, beforeAll } from "vitest";
 
-dotenv.config({ path: ".env.test" }); // Ensure you have a .env.test file for test DB
+dotenv.config({ path: ".env.test", override: true }); // Ensure you have a .env.test file for test DB
 
 const testDbUrl = process.env.DATABASE_URL;
-
+console.log("Using test database URL:", testDbUrl);
 if (!testDbUrl) {
   throw new Error("DATABASE_URL must be set in .env.test for tests.");
 }
@@ -43,4 +43,4 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await teardown();
-});
+}); // 60 second timeout for teardown

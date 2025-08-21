@@ -8,6 +8,11 @@ export default {
   out: "./drizzle", // Directory for migration files
   dialect: "postgresql",
   dbCredentials: {
-    url: "postgresql://user:password@db:5432/snippets_db",
+    url: "postgresql://user:password@localhost:5432/snippets_db",
+    host: "localhost",
+    user: "user",
+    password: "password",
+    database: "snippets_db",
+    port: 5432,
   },
 } satisfies Config;
