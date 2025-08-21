@@ -13,4 +13,4 @@ COPY . .
 RUN npm run build
 
 EXPOSE 3030
-CMD ["npm", "run", "start", "--", "--port", "3030", "--host"]
+#CMD ["npm", "run", "serve", "--", "--port", "3030", "--host"]

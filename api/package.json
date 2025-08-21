@@ -13,6 +13,7 @@
     "test": "vitest run",
     "lint": "eslint . --ext .ts",
     "migrate": "drizzle-kit push",
+    "test:migrate": "drizzle-kit push --config tests/drizzle.config.ts",
     "db:generate": "drizzle-kit generate",
     "db:pull": "drizzle-kit pull",
     "studio": "drizzle-kit studio"

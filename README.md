@@ -32,7 +32,7 @@ The service is split into two main components:
 1. **Clone the repository:**
 
    ```bash
-   git clone [YOUR_REPO_URL]
+   git clone [https://github.com/edunomatseye/house-numbers]
    cd snippet-summarizer
    ```
 
@@ -55,7 +55,7 @@ The service is split into two main components:
 This method sets up the PostgreSQL database, backend API, and frontend UI in isolated containers. Tests are run automatically during backend container startup.
 
 ```bash
-docker compose up --build
+docker compose up --build -d app_db api web
 ```
 
 - The `api` service will run `npm test` during its build process. If tests pass, the API server will start on `http://localhost:3000`.
@@ -74,7 +74,7 @@ docker run --name some-postgres -p 5432:5432 -e POSTGRES_DB=snippets_db -e POSTG
 #### 2.2. Backend Setup
 
 ```bash
-cd backend
+cd api
 npm install # or yarn install
 npm run migrate # Run Drizzle migrations to create tables
 npm run dev
@@ -85,7 +85,7 @@ The API server will be available at `http://localhost:3000`.
 #### 2.3. Frontend Setup
 
 ```bash
-cd frontend
+cd ui
 npm install # or yarn install
 npm run dev
 ```
@@ -184,7 +184,7 @@ They utilize a real PostgreSQL connection (via `DATABASE_URL` env var) and mock 
 - **Local:**
 
   ```bash
-  cd backend
+  cd api
   npm test
   ```
 

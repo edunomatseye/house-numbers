@@ -1,19 +1,8 @@
 version: "3.8"
 
 services:
-  testdb:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: test_snippets_db
-      POSTGRES_USER: test_user
-      POSTGRES_PASSWORD: test_password
-    ports:
-      - "5433:5433"
-    volumes:
-      - pgdata:/var/lib/postgresql/data_test
-
-  db:
+  # --- Application Database Service ---
+  app_db:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
@@ -21,28 +10,53 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     ports:
-      - "5432:5432"
+      - "5432:5432" # Expose app DB on host port 5432
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata_app:/var/lib/postgresql/data # Volume for app data persistence
+    healthcheck: # Basic healthcheck to ensure DB is ready
+      test: ["CMD-SHELL", "pg_isready -U user -d snippets_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
+  # --- Test Database Service ---
+  test_db:
+    image: postgres:16-alpine
+    restart: "no" # Test DB usually doesn't need to auto-restart
+    environment:
+      POSTGRES_DB: test_snippets_db
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+    ports:
+      - "5433:5432" # Expose test DB on host port 5433 (container port 5432)
+    volumes:
+      - pgdata_test:/var/lib/postgresql/data # Volume for test data persistence
+    healthcheck: # Basic healthcheck
+      test: ["CMD-SHELL", "pg_isready -U test_user -d test_snippets_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --- Backend API Service ---
   api:
     build:
       context: ./api
       dockerfile: Dockerfile
     env_file:
-      - ./.env
+      - ./api/.env # Load secrets like OPENAI_API_KEY
     environment:
       PORT: 3000
+      # Connect to the app_db service for the application's runtime
       DATABASE_URL: ${DATABASE_URL}
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
     depends_on:
-      - db
-      - testdb
+      app_db:
+        condition: service_healthy # Wait for app_db to be healthy
     ports:
       - "3000:3000"
-    # The CMD in Dockerfile runs tests and then starts the server
     restart: "no" # Set to "on-failure" or "always" for production
+    command: npm run start # Start the backend service
 
+  # --- Frontend Web Service ---
   web:
     build:
       context: ./ui
@@ -52,11 +66,31 @@ services:
     environment:
       VITE_API_BASE_URL: http://api:3000
       PORT: 3030
-    ports:
-      - "3030:3030"
     depends_on:
       - api
+    ports:
+      - "3030:3030"
     restart: "no"
+    command: npm run start # Start the frontend service
+
+  # --- Test Runner Service (Optional but useful for containerized testing) ---
+  # If you want to run your 'npm test' inside a container within this compose setup
+  # This avoids needing to expose the test_db port to the host for npm test
+  test_runner:
+    build:
+      context: ./api # Use backend context to get build dependencies
+      dockerfile: Dockerfile # Reuse the backend Dockerfile
+    env_file:
+      - ./api/.env.test # Load the .env.test file for test-specific variables
+    environment:
+      # Connect to the test_db service for the test run
+      DATABASE_URL: ${DATABASE_URL}
+    depends_on:
+      test_db:
+        condition: service_healthy # Wait for test_db to be healthy
+    restart: "no"
+    command: sh -c "npm run test:migrate && npm test"
 
 volumes:
-  pgdata:
+  pgdata_app: # Volume for the application's database
+  pgdata_test: # Volume for the test database
