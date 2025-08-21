@@ -1,11 +1,13 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import viteReact from "@vitejs/plugin-react";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
+import { resolve } from "node:path";
 
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     tanstackRouter({ target: "react", autoCodeSplitting: true }),
-    react(),
+    viteReact(),
   ],
   server: {
     host: true, // Listen on all network interfaces
@@ -24,6 +26,11 @@ export default defineConfig({
     reportCompressedSize: true,
     commonjsOptions: {
       transformMixedEsModules: true,
+    },
+  },
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "./src"),
     },
   },
 });

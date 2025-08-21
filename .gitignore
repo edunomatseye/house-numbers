@@ -4,3 +4,11 @@ dist
 .env.test
 .env.*
 
+frontend/node_modules
+backend/node_modules
+backend/build
+ui/node_modules
+
+
+# IDE-specific ignore files
+
