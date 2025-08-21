@@ -11,10 +11,10 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm ci
 
 # Copy tsconfig.json and drizzle.config.ts for build and migrations
-COPY tsconfig.json drizzle.config.ts ./
+COPY tsconfig.json drizzle.config.ts tsconfig.bundle.json tsdown.config.js ./
 # Copy source code and tests
 COPY src ./src
 COPY tests ./tests
@@ -22,7 +22,7 @@ COPY drizzle ./drizzle
 COPY build ./build
 
 # Build the TypeScript project
-RUN npm run build
+RUN npm run build:bundle
 
 # Expose the port the API server will run on
 EXPOSE 3000

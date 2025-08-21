@@ -7,8 +7,8 @@ import { afterAll, beforeAll } from "vitest";
 
 dotenv.config({ path: ".env.test", override: true }); // Ensure you have a .env.test file for test DB
 
-const testDbUrl = process.env.DATABASE_URL;
-console.log("Using test database URL:", testDbUrl);
+const testDbUrl = process.env.DATABASE_TEST_URL;
+
 if (!testDbUrl) {
   throw new Error("DATABASE_URL must be set in .env.test for tests.");
 }
