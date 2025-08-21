@@ -64,7 +64,7 @@ services:
     env_file:
       - ./.env
     environment:
-      VITE_API_BASE_URL: http://api:3000
+      VITE_API_BASE_URL: http://localhost:3000
       PORT: 3030
     depends_on:
       - api

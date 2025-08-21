@@ -14,13 +14,15 @@ export default defineConfig({
     port: 3030, // Frontend will run on port 3030
     proxy: {
       "/api": {
-        target: "http://api:3000", // Points to the backend service in Docker Compose
+        target: "http://localhost:3000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""), // Remove /api prefix
       },
     },
   },
   build: {
+    target: "es2020", // Target modern browsers for smaller bundles
+    sourcemap: false,
     outDir: "./dist",
     emptyOutDir: true,
     reportCompressedSize: true,
