@@ -33,7 +33,7 @@ The service is split into two main components:
 
    ```bash
    git clone [https://github.com/edunomatseye/house-numbers]
-   cd snippet-summarizer
+   cd house-numbers
    ```
 
 2. **Environment Variables:**
