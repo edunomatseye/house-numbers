@@ -19,17 +19,18 @@ COPY tsconfig.json drizzle.config.ts tsconfig.bundle.json tsdown.config.js ./
 COPY src ./src
 COPY tests ./tests
 COPY drizzle ./drizzle
-COPY build ./build
 
 # Build the TypeScript project
 RUN npm run build:bundle
+
+COPY build ./build
 
 # Expose the port the API server will run on
 EXPOSE 3000
 
 # Set environment variables (these will be overridden by docker-compose .env)
 ENV PORT=3000
-ENV DATABASE_URL="postgresql://user:password@db:5432/snippets_db"
+ENV DATABASE_URL="postgresql://user:password@app_db:5432/snippets_db?sslmode=disable"
 ENV OPENAI_API_KEY=dummy_key
 
 # Command to start the server 
