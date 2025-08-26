@@ -21,7 +21,7 @@ COPY tests ./tests
 COPY drizzle ./drizzle
 
 # Build the TypeScript project
-RUN npm run build:bundle
+RUN npm run build:prod
 
 COPY build ./build
 
