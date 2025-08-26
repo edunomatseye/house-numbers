@@ -6,6 +6,7 @@ interface Snippet {
   id: string;
   text: string;
   summary: string;
+  createdAt: string;
 }
 
 export const Route = createFileRoute("/")({
@@ -56,6 +57,11 @@ function Index() {
     }
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleString(); // Adjust options for desired format
+  };
+
   return (
     <div>
       <h1>Create New Snippet</h1>
@@ -87,6 +93,9 @@ function Index() {
             <div>
               <strong>Original Text:</strong>
               <pre>{snippet.text}</pre>
+              <div style={{ fontSize: "0.8em", color: "#666" }}>
+                Created: {formatDate(snippet.createdAt)}
+              </div>
             </div>
           </li>
         ))}

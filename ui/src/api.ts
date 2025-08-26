@@ -4,6 +4,7 @@ interface Snippet {
   id: string;
   text: string;
   summary: string;
+  createdAt: string;
 }
 
 export async function createSnippet(text: string): Promise<Snippet> {

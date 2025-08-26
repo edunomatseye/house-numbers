@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { seed, reset } from "drizzle-seed";
-import * as schema from "./schema";
+import * as schema from "./schema.ts";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -18,6 +18,7 @@ export async function seedDb(seeding = true) {
             columns: {
               text: funcs.loremIpsum(),
               summary: funcs.loremIpsum(),
+              createdAt: funcs.timestamp(),
             },
           },
         }))

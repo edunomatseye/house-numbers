@@ -61,11 +61,14 @@ router.get("/", async (req, res) => {
     });
 
     // Remove createdAt for consistency with requirements
-    const formattedSnippets = allSnippets.map(({ id, text, summary }) => ({
-      id,
-      text,
-      summary,
-    }));
+    const formattedSnippets = allSnippets.map(
+      ({ id, text, summary, createdAt }) => ({
+        id,
+        text,
+        summary,
+        createdAt,
+      })
+    );
 
     return res.status(200).json(formattedSnippets);
   } catch (error: any) {
@@ -93,8 +96,8 @@ router.get("/:id", async (req, res) => {
     }
 
     // Exclude createdAt for consistency
-    const { text, summary } = snippet;
-    return res.status(200).json({ id, text, summary });
+    const { text, summary, createdAt } = snippet;
+    return res.status(200).json({ id, text, summary, createdAt });
   } catch (error: any) {
     console.error("Error fetching snippet by ID:", error);
     return res
