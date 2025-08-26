@@ -16,8 +16,8 @@ export async function seedDb(seeding = true) {
           snippets: {
             count: 100,
             columns: {
-              text: funcs.loremIpsum(),
-              summary: funcs.loremIpsum(),
+              text: funcs.loremIpsum({ sentencesCount: 5 }),
+              summary: funcs.loremIpsum({ sentencesCount: 2 }),
               createdAt: funcs.timestamp(),
             },
           },
