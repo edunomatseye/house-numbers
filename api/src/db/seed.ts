@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { seed, reset } from "drizzle-seed";
-import * as schema from "./schema.ts";
+import * as schema from "./schema";
 
 import dotenv from "dotenv";
 dotenv.config();
