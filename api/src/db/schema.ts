@@ -28,6 +28,9 @@ export const users = pgTable("users", {
 export const usersRelations = relations(users, ({ many }) => ({
   usersToGroups: many(usersToGroups),
 }));
+export type Users = typeof snippets.$inferSelect;
+export type NewUsers = typeof snippets.$inferSelect;
+
 export const groups = pgTable("groups", {
   id: serial("id").primaryKey(),
   name: text("name"),
