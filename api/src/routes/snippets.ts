@@ -1,11 +1,18 @@
 import { Router } from "express";
-import { db } from "../db/index";
-import { snippets } from "../db/schema";
 import { eq } from "drizzle-orm";
-import { generateSummary } from "../services/ai";
-import { NewSnippet } from "../types/snippet";
+import { toNodeHandler } from "better-auth/node";
+
+import { db } from "@/db/index";
+import { snippets } from "@/db/schema";
+import { generateSummary } from "@/services/ai";
+import { NewSnippet } from "@/types/snippet";
+
+import { auth } from "@/lib/auth";
 
 const router = Router();
+
+// Authentication routes
+router.all("/api/auth/*", toNodeHandler(auth));
 
 // Create Snippet
 router.post("/", async (req, res) => {
