@@ -21,15 +21,15 @@ export const snippets = pgTable("snippets", {
 export type Snippet = typeof snippets.$inferSelect; // return type when queried
 export type NewSnippet = typeof snippets.$inferInsert; // insert type
 
-export const users = pgTable("users", {
+export const old_users = pgTable("old_users", {
   id: serial("id").primaryKey(),
   name: text("name"),
 });
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(old_users, ({ many }) => ({
   usersToGroups: many(usersToGroups),
 }));
-export type Users = typeof snippets.$inferSelect;
-export type NewUsers = typeof snippets.$inferSelect;
+export type OldUsers = typeof snippets.$inferSelect;
+export type OldNewUsers = typeof snippets.$inferSelect;
 
 export const groups = pgTable("groups", {
   id: serial("id").primaryKey(),
@@ -38,12 +38,13 @@ export const groups = pgTable("groups", {
 export const groupsRelations = relations(groups, ({ many }) => ({
   usersToGroups: many(usersToGroups),
 }));
+
 export const usersToGroups = pgTable(
   "users_to_groups",
   {
     userId: integer("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => old_users.id),
     groupId: integer("group_id")
       .notNull()
       .references(() => groups.id),
@@ -55,8 +56,8 @@ export const usersToGroupsRelations = relations(usersToGroups, ({ one }) => ({
     fields: [usersToGroups.groupId],
     references: [groups.id],
   }),
-  user: one(users, {
+  user: one(old_users, {
     fields: [usersToGroups.userId],
-    references: [users.id],
+    references: [old_users.id],
   }),
 }));

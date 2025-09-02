@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { toNodeHandler } from "better-auth/node";
 
 import { db } from "@/db/index";
-import { snippets } from "@/db/schema";
+import { snippets } from "@/db/schema/schema";
 import { generateSummary } from "@/services/ai";
 import { NewSnippet } from "@/types/snippet";
 
