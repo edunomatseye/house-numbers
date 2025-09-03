@@ -10,7 +10,6 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { useState } from "react";
-import Image from "next/image";
 import { Loader2, X } from "lucide-react";
 import { signUp } from "@/lib/auth-client";
 import { toast } from "sonner";
@@ -119,12 +118,7 @@ function SignUp() {
             <div className="flex items-end gap-4">
               {imagePreview && (
                 <div className="relative w-16 h-16 rounded-sm overflow-hidden">
-                  <Image
-                    src={imagePreview}
-                    alt="Profile preview"
-                    layout="fill"
-                    objectFit="cover"
-                  />
+                  <img src={imagePreview} alt="Profile preview" />
                 </div>
               )}
               <div className="flex items-center gap-2 w-full">
@@ -152,13 +146,29 @@ function SignUp() {
             className="w-full"
             disabled={loading}
             onClick={async () => {
-              await signUp.email({
-                email,
-                password,
-                name: `${firstName} ${lastName}`,
-                image: image ? await convertImageToBase64(image) : "",
-                callbackURL: "/dashboard",
-                fetchOptions: {
+              await signUp.email(
+                {
+                  email,
+                  password,
+                  name: `${firstName} ${lastName}`,
+                  image: image ? await convertImageToBase64(image) : "",
+                  callbackURL: "/dashboard",
+                  fetchOptions: {
+                    onResponse: () => {
+                      setLoading(false);
+                    },
+                    onRequest: () => {
+                      setLoading(true);
+                    },
+                    onError: (ctx) => {
+                      toast.error(ctx.error.message);
+                    },
+                    onSuccess: async () => {
+                      router.navigate({ to: "/dashboard" });
+                    },
+                  },
+                },
+                {
                   onResponse: () => {
                     setLoading(false);
                   },
@@ -171,8 +181,8 @@ function SignUp() {
                   onSuccess: async () => {
                     router.navigate({ to: "/dashboard" });
                   },
-                },
-              });
+                }
+              );
             }}
           >
             {loading ? (

@@ -7,7 +7,7 @@
     "build": "tsc -p tsconfig.json",
     "build:bundle": "tsdown --project tsconfig.bundle.json",
     "build:prod": "tsdown --project tsconfig.bundle.json --minify",
-    "start": "node build/server.js",
+    "start": "nodemon build/server.js",
     "start:bundle": "node build/app.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "test": "vitest run",
@@ -26,6 +26,7 @@
     "drizzle-orm": "^0.44.4",
     "drizzle-seed": "^0.3.0",
     "express": "^4.19.2",
+    "nodemon": "^3.1.10",
     "pg": "^8.11.5",
     "uuid": "^9.0.1"
   },

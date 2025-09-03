@@ -1,24 +1,37 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import snippetsRouter from "./routes/snippets";
+import snippetsRouter from "@/routes/snippets";
+import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
+import { auth } from "@/lib/auth";
 
 export function createApp() {
   const app = express();
 
   // Basic CORS configuration for local development
-  app.use(
-    cors({
-      origin: "*", // Allow all for now, in production specify frontend origin
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      allowedHeaders: ["Content-Type", "Authorization"],
-    })
-  );
+  const corsOptions = {
+    origin: "http://localhost:3031",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  };
+
+  app.use(cors(corsOptions));
+  app.options("*", cors(corsOptions));
+
+  // Authentication routes
+  app.all("/api/auth/*", toNodeHandler(auth));
+
+  app.get("/api/me", async (req, res) => {
+    const session = await auth.api.getSession({
+      headers: fromNodeHeaders(req.headers),
+    });
+    return res.json(session);
+  });
 
   app.use(bodyParser.json());
-
   // Health check endpoint
-  app.get("/health", (req, res) => res.status(200).json({ status: "ok" }));
+  app.get("/health", (req, res) => res.status(200).json({ status: "ok boy!" }));
 
   // Routes
   app.use("/snippets", snippetsRouter);
